@@ -1,7 +1,24 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
+import React from 'react'
+
 import styles from '../styles/Home.module.css'
+
+import puppeteer from "puppeteer";
+
+
+(async () => {
+  const browser = await puppeteer.launch({headless: false});
+  const page = await browser.newPage();
+  await page.goto("https://dolarhoy.com/");
+
+  const grabPrice = await page.evaluate(()=> {
+    const spTag = document.querySelector("a[href='/cotizaciondolarblue']");
+    return spTag?.innerHTML;
+  });
+  console.log(grabPrice)
+  await browser.close();
+})();
 
 const Home: NextPage = () => {
   return (
