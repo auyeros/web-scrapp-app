@@ -1,26 +1,28 @@
 import type { NextPage } from 'next'
+
 import Head from 'next/head'
 import React from 'react'
 
 import styles from '../styles/Home.module.css'
 
-import puppeteer from "puppeteer";
 
+export async function getServerSideProps() {
+  const quotes = await fetch('http://localhost:3000/api/quotes')
+  const data = await quotes.json()
 
-(async () => {
-  const browser = await puppeteer.launch({headless: false});
-  const page = await browser.newPage();
-  await page.goto("https://dolarhoy.com/");
+  if (!data) {
+    return {
+      notFound: true,
+    }
+  }
 
-  const grabPrice = await page.evaluate(()=> {
-    const spTag = document.querySelector("a[href='/cotizaciondolarblue']");
-    return spTag?.innerHTML;
-  });
-  console.log(grabPrice)
-  await browser.close();
-})();
+  return {
+    props: {data}, // will be passed to the page component as props
+  }
+}
 
-const Home: NextPage = () => {
+const Home: NextPage = ({data}) => {
+  console.log(data, 'llego')
   return (
     <div className={styles.container}>
       <Head>
@@ -31,5 +33,7 @@ const Home: NextPage = () => {
     </div>
   )
 }
+
+
 
 export default Home
