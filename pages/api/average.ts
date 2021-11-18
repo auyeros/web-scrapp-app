@@ -14,7 +14,7 @@ export default async function getAverage(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-let averagesArray = [];
+let averArray = [];
 
 await (async () => {
         const cluster = await Cluster.launch({
@@ -42,8 +42,8 @@ await (async () => {
               average_sell_price: avVentaAmbito,
               source: url
             });
-          averagesArray.push.apply(averagesArray, valoresAmbito);
-          console.log(averagesArray, 'AMBITO')
+          averArray.push.apply(averArray, valoresAmbito);
+          console.log(averArray, 'AMBITO')
 
         };
 
@@ -67,8 +67,8 @@ await (async () => {
             average_sell_price: avVentaHoy,
             source: url
           });
-        averagesArray.push.apply(averagesArray, valoresHoy);
-        console.log(averagesArray, 'DOLARHOY')
+        averArray.push.apply(averArray, valoresHoy);
+        console.log(averArray, 'DOLARHOY')
         };
 
         const cronistaPrecio = async ({ page, data: url }) => {
@@ -90,8 +90,8 @@ await (async () => {
           average_sell_price: avVentaCronista,
           source: url
         });
-      averagesArray.push.apply(averagesArray, valoresCronista);
-      console.log(averagesArray, 'CRONISTA')
+      averArray.push.apply(averArray, valoresCronista);
+      console.log(averArray, 'CRONISTA')
       };
 
         cluster.queue('https://www.ambito.com/contenidos/dolar.html', ambitoPrecio);
@@ -103,14 +103,14 @@ await (async () => {
         await cluster.close();
       })
       ()
-      res.status(200).json({averagesArray})
+      res.status(200).json({averArray})
 
 
-      let buyPrice = averagesArray.map(quote => quote.average_buy_price)
-      console.log(buyPrice)
+      // let buyPrice = averArray.map(quote => quote.average_buy_price)
+      // console.log(buyPrice)
       
-      let sellPrice = averagesArray.map(quote => quote.average_sell_price)
-      console.log(sellPrice)
+      // let sellPrice = averArray.map(quote => quote.average_sell_price)
+      // console.log(sellPrice)
       
     // let count = 0;
     // let total= 0;
