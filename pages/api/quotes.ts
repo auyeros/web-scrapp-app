@@ -3,8 +3,8 @@ import { Cluster } from 'puppeteer-cluster';
 
 
 type Data = [{
-  buy_price: string,
-  sell_price: string,
+  buy_price: number,
+  sell_price: number,
   source: string
 }]
 
